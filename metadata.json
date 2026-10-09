@@ -1,0 +1,6 @@
+{
+  "name": "Nani Teer wali",
+  "description": "Nani Teer wali - Minimalist arrow puzzle escape game by Ubaid. Tap arrows to slide them off the board!",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
