@@ -11,12 +11,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import com.example.R
+import com.example.game.assets.CustomAssetHelper
 
 /**
- * Renders the user-provided photo of Nani in the background of the game,
- * with an atmospheric gradient overlay to maintain pristine contrast,
- * sharpness, and gameplay readability.
+ * Renders the custom background photo from `background_image/` folder
+ * (or fallback to Nani photo) with an atmospheric gradient overlay
+ * to maintain pristine contrast, sharpness, and gameplay readability.
  */
 @Composable
 fun GameBackground(
@@ -24,16 +27,27 @@ fun GameBackground(
     overlayColor: Color = Color(0xFF0B132B),
     content: @Composable BoxScope.() -> Unit
 ) {
+    val context = LocalContext.current
+    val customBitmap = remember { CustomAssetHelper.getBackgroundImage(context) }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Background photo of Nani
-        Image(
-            painter = painterResource(id = R.drawable.game_bg_nani),
-            contentDescription = "Background",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+        if (customBitmap != null) {
+            Image(
+                bitmap = customBitmap,
+                contentDescription = "Background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.game_bg_nani),
+                contentDescription = "Background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         // Dark gradient scrim/overlay to ensure crisp puzzle visibility and contrast
         Box(

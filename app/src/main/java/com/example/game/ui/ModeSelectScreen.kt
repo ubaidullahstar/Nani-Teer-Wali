@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
 
+import com.example.game.ui.components.AppPictureImage
 import com.example.game.ui.components.GameBackground
 
 @Composable
@@ -74,9 +75,8 @@ fun ModeSelectScreen(
                         .background(Color(0xFF1E293B)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.nani_avatar),
-                        contentDescription = "Nani Logo",
+                    AppPictureImage(
+                        contentDescription = "App Picture",
                         modifier = Modifier.fillMaxSize()
                     )
                 }

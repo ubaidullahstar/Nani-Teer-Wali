@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +36,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
+                // Plays custom app startup sound from audio folder on initial launch
+                LaunchedEffect(Unit) {
+                    soundManager.playAppStart()
+                }
+
                 // Starts on Mode Selection screen as requested: "jab shuru ho to pocha jae normal mode ya maze mode"
                 var currentScreen by remember { mutableStateOf(ScreenState.MODE_SELECT) }
                 // Starts at Level 1 when selected: "jab koi game select ho to phele level se hi shuru ho"

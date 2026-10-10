@@ -1,14 +1,17 @@
 package com.example.game.sound
 
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.CombinedVibration
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.example.game.assets.CustomAssetHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,10 +50,25 @@ class SoundManager(private val context: Context) {
         }
     }
 
+    fun playAppStart() {
+        if (!isSoundEnabled) return
+        playAssetOrFallback(CustomAssetHelper.AudioCategory.APP_START) {
+            // Uplifting welcome jingle
+            val notes = floatArrayOf(261.63f, 329.63f, 392.00f, 523.25f)
+            for (note in notes) {
+                playTone(frequency = note, durationMs = 100, attackMs = 10, decayMs = 90)
+            }
+        }
+    }
+
     fun playBlocked() {
+        playWrongMove()
+    }
+
+    fun playWrongMove() {
         vibrate(80, 255)
         if (!isSoundEnabled) return
-        scope.launch {
+        playAssetOrFallback(CustomAssetHelper.AudioCategory.WRONG_MOVE) {
             // Dull double low thud
             playTone(frequency = 160f, durationMs = 70, attackMs = 5, decayMs = 65)
         }
@@ -74,13 +92,48 @@ class SoundManager(private val context: Context) {
     }
 
     fun playLevelComplete() {
+        playWinning()
+    }
+
+    fun playWinning() {
         vibratePattern(longArrayOf(0, 60, 40, 80, 40, 120))
         if (!isSoundEnabled) return
-        scope.launch {
+        playAssetOrFallback(CustomAssetHelper.AudioCategory.WINNING) {
             // Uplifting victory arpeggio: C5 -> E5 -> G5 -> C6
             val notes = floatArrayOf(523.25f, 659.25f, 783.99f, 1046.50f)
             for (note in notes) {
                 playTone(frequency = note, durationMs = 90, attackMs = 10, decayMs = 80)
+            }
+        }
+    }
+
+    private fun playAssetOrFallback(
+        category: CustomAssetHelper.AudioCategory,
+        fallbackTone: suspend () -> Unit
+    ) {
+        scope.launch(Dispatchers.IO) {
+            var afd: AssetFileDescriptor? = null
+            try {
+                afd = CustomAssetHelper.getAudioFd(context, category)
+                if (afd != null) {
+                    val player = MediaPlayer()
+                    player.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                    afd.close()
+                    player.setOnCompletionListener { mp ->
+                        try { mp.release() } catch (_: Exception) {}
+                    }
+                    player.setOnErrorListener { mp, _, _ ->
+                        try { mp.release() } catch (_: Exception) {}
+                        true
+                    }
+                    player.prepare()
+                    player.start()
+                } else {
+                    fallbackTone()
+                }
+            } catch (_: Exception) {
+                try { afd?.close() } catch (_: Exception) {}
+                fallbackTone()
             }
         }
     }

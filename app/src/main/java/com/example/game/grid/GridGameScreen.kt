@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.R
+import com.example.game.ui.components.AppPictureImage
 import com.example.game.ui.components.GameBackground
 import com.example.game.model.ArrowState
 import com.example.game.model.Direction
@@ -220,9 +221,8 @@ fun GridGameScreen(
                             .background(Color(0xFF1E293B)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.nani_avatar),
-                            contentDescription = "Nani Logo",
+                        AppPictureImage(
+                            contentDescription = "App Picture",
                             modifier = Modifier.fillMaxSize()
                         )
                     }
@@ -439,9 +439,8 @@ fun GridGameScreen(
                             .border(3.dp, Color(0xFFFBBF24), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.nani_avatar),
-                            contentDescription = "Nani Logo",
+                        AppPictureImage(
+                            contentDescription = "App Picture",
                             modifier = Modifier.fillMaxSize()
                         )
                     }

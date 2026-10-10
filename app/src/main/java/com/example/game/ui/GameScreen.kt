@@ -67,6 +67,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.game.ui.components.AppPictureImage
 import com.example.game.ui.components.GameBackground
 import com.example.game.logic.ArrowGameEngine
 import com.example.game.logic.LevelRegistry
@@ -299,9 +300,8 @@ fun GameScreen(
                             .background(Color(0xFF1E293B)),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.foundation.Image(
-                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.nani_avatar),
-                            contentDescription = "Nani Logo",
+                        AppPictureImage(
+                            contentDescription = "App Picture",
                             modifier = Modifier.fillMaxSize()
                         )
                     }
@@ -537,9 +537,8 @@ fun GameScreen(
                             .border(3.dp, Color(0xFFF59E0B), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.foundation.Image(
-                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.nani_avatar),
-                            contentDescription = "Nani Logo",
+                        AppPictureImage(
+                            contentDescription = "App Picture",
                             modifier = Modifier.fillMaxSize()
                         )
                     }

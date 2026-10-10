@@ -64,6 +64,13 @@ android {
     buildConfig = true
   }
   testOptions { unitTests { isIncludeAndroidResources = true } }
+  sourceSets {
+    getByName("main") {
+      assets.srcDirs(
+        "${rootDir}/custom_assets"
+      )
+    }
+  }
   dependenciesInfo {
     includeInApk = false
     includeInBundle = true
